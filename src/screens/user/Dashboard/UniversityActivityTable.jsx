@@ -1,0 +1,290 @@
+import React, { useEffect, useState } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  ActivityIndicator,
+  FlatList,
+} from 'react-native';
+import Ionicons from '@react-native-vector-icons/ionicons';
+import { getDashboardUniversities } from '../../../services/allServices';
+
+const UniversityActivityTable = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const [page, setPage] = useState(1);
+  const [totalRows, setTotalRows] = useState(0);
+
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+
+  const pageSize = 10;
+  const totalPages = Math.ceil(totalRows / pageSize) || 1;
+
+  /* ---------------- Debounce Search ---------------- */
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setDebouncedSearch(search.trim());
+      setPage(1);
+    }, 500);
+
+    return () => clearTimeout(t);
+  }, [search]);
+
+  /* ---------------- Fetch Universities ---------------- */
+  const fetchUniversities = async () => {
+    setLoading(true);
+    try {
+      const payload = {
+        page,
+        page_size: pageSize,
+        sort_order: -1,
+        sort_by: 'created_at',
+        ...(debouncedSearch && { search: debouncedSearch }),
+      };
+
+      const res = await getDashboardUniversities(payload);
+
+      const results = res?.results || res?.data?.results || [];
+      const total = res?.total || res?.data?.total || 0;
+
+      setData(results);
+      setTotalRows(total);
+    } catch (err) {
+      console.error('Error fetching university activity:', err);
+      setData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUniversities();
+  }, [page, debouncedSearch]);
+
+  /* ---------------- Render Single University Card ---------------- */
+  const renderItem = ({ item }) => (
+    <View style={styles.card}>
+      <Text style={styles.universityName}>{item.name}</Text>
+
+      <View style={styles.statsGrid}>
+        <View style={styles.statBox}>
+          <Text style={styles.statLabel}>Enrolled Programs</Text>
+          <Text style={styles.statValue}>{item.total_shared_programs ?? 0}</Text>
+        </View>
+
+        <View style={styles.statBox}>
+          <Text style={styles.statLabel}>Active Cohorts</Text>
+          <Text style={styles.statValue}>{item.total_active_cohorts ?? 0}</Text>
+        </View>
+
+        <View style={styles.statBox}>
+          <Text style={styles.statLabel}>Total Faculty</Text>
+          <Text style={styles.statValue}>{item.total_faculty ?? 0}</Text>
+        </View>
+
+        <View style={styles.statBox}>
+          <Text style={styles.statLabel}>Total Students</Text>
+          <Text style={styles.statValue}>{item.total_students ?? 0}</Text>
+        </View>
+
+        <View style={styles.statBox}>
+          <Text style={styles.statLabel}>Enrolled Students</Text>
+          <Text style={styles.statValue}>{item.total_approved_students ?? 0}</Text>
+        </View>
+
+        <View style={styles.statBox}>
+          <Text style={styles.statLabel}>Certifications</Text>
+          <Text style={styles.statValue}>{item.total_certification ?? 0}</Text>
+        </View>
+      </View>
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      {/* Header & Search */}
+      <Text style={styles.headerTitle}>University Activity</Text>
+
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search Universities..."
+          placeholderTextColor="#9CA3AF"
+          value={search}
+          onChangeText={setSearch}
+        />
+        <Ionicons name="search-outline" size={20} color="#9CA3AF" style={styles.searchIcon} />
+      </View>
+
+      {/* Content */}
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="small" color="#2563EB" />
+        </View>
+      ) : data.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>No universities found</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={data}
+          keyExtractor={(item, index) => item.id?.toString() || index.toString()}
+          renderItem={renderItem}
+          scrollEnabled={false}
+        />
+      )}
+
+      {/* Pagination Controls */}
+      <View style={styles.paginationContainer}>
+        <TouchableOpacity
+          disabled={page === 1}
+          onPress={() => setPage(1)}
+          style={[styles.pageBtn, page === 1 && styles.disabledBtn]}>
+          <Ionicons name="play-skip-back-outline" size={16} color={page === 1 ? '#D1D5DB' : '#374151'} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          disabled={page === 1}
+          onPress={() => setPage((p) => Math.max(p - 1, 1))}
+          style={[styles.pageBtn, page === 1 && styles.disabledBtn]}>
+          <Ionicons name="chevron-back-outline" size={16} color={page === 1 ? '#D1D5DB' : '#374151'} />
+        </TouchableOpacity>
+
+        <Text style={styles.pageIndicator}>
+          Page {page} of {totalPages}
+        </Text>
+
+        <TouchableOpacity
+          disabled={page >= totalPages}
+          onPress={() => setPage((p) => Math.min(p + 1, totalPages))}
+          style={[styles.pageBtn, page >= totalPages && styles.disabledBtn]}>
+          <Ionicons name="chevron-forward-outline" size={16} color={page >= totalPages ? '#D1D5DB' : '#374151'} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          disabled={page >= totalPages}
+          onPress={() => setPage(totalPages)}
+          style={[styles.pageBtn, page >= totalPages && styles.disabledBtn]}>
+          <Ionicons name="play-skip-forward-outline" size={16} color={page >= totalPages ? '#D1D5DB' : '#374151'} />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default UniversityActivityTable;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#111827',
+    marginBottom: 12,
+  },
+  searchContainer: {
+    position: 'relative',
+    marginBottom: 16,
+  },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingLeft: 12,
+    paddingRight: 40,
+    fontSize: 14,
+    color: '#111827',
+    backgroundColor: '#FAFAFA',
+  },
+  searchIcon: {
+    position: 'absolute',
+    right: 12,
+    top: 12,
+  },
+  card: {
+    backgroundColor: '#F9FAFB',
+    borderColor: '#E5E7EB',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 14,
+    marginBottom: 12,
+  },
+  universityName: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#111827',
+    marginBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+    paddingBottom: 8,
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    rowGap: 10,
+  },
+  statBox: {
+    width: '50%',
+  },
+  statLabel: {
+    fontSize: 12,
+    color: '#6B7280',
+    marginBottom: 2,
+  },
+  statValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1F2937',
+  },
+  loadingContainer: {
+    paddingVertical: 24,
+    alignItems: 'center',
+  },
+  emptyContainer: {
+    paddingVertical: 24,
+    alignItems: 'center',
+  },
+  emptyText: {
+    color: '#6B7280',
+    fontSize: 14,
+  },
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 12,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#F3F4F6',
+  },
+  pageBtn: {
+    padding: 8,
+    borderRadius: 6,
+    backgroundColor: '#F3F4F6',
+  },
+  disabledBtn: {
+    backgroundColor: '#F9FAFB',
+  },
+  pageIndicator: {
+    fontSize: 13,
+    color: '#4B5563',
+    fontWeight: '500',
+    marginHorizontal: 8,
+  },
+});
