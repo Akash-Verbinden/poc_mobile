@@ -3,8 +3,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@react-native-vector-icons/ionicons';
 
 import UserStacks from './stacks/UserStacks';
-import Programs from '../screens/user/Programs';
+import Programs from '../screens/user/Programs/Programs';
 import Communication from '../screens/user/Communication';
+import ProgramsStack from './stacks/ProgramsStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -49,7 +50,7 @@ const TabNavigator = () => {
       {/* 2nd Tab */}
       <Tab.Screen
         name="programs"
-        component={Programs}
+        component={ProgramsStack}
         options={{ tabBarLabel: 'Programs' }}
       />
 

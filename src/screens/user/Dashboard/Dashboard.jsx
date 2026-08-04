@@ -5,11 +5,10 @@ import {
   Text,
   View,
 } from 'react-native';
-// Replace SafeAreaView import or change to standard View
-import CountCard from './CountCard';
 import UnivsersityActivityTable from './UniversityActivityTable';
 import { getSuperAdminMetrics } from '../../../services/allServices';
 import Loader from '../../../components/Loader';
+import DashboardMetrics from './DashboardMetrics';
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
@@ -44,76 +43,7 @@ const Dashboard = () => {
         {/* Main Header */}
         <Text style={styles.mainHeader}>Super Admin Dashboard</Text>
 
-        {/* Section 1: University Data */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>University Data</Text>
-          <View style={styles.cardGrid}>
-            <CountCard
-              title="Total Universities"
-              count={data?.universities?.total ?? 0}
-              iconName="school-outline"
-            />
-            <CountCard
-              title="Total Enrolled Universities"
-              count={data?.universities?.active ?? 0}
-              iconName="school-outline"
-            />
-            <CountCard
-              title="Total Active Programs"
-              count={data?.programs?.total ?? 0}
-              iconName="book-outline"
-            />
-            <CountCard
-              title="Total Programs Assigned"
-              count={data?.programs?.assigned ?? 0}
-              iconName="book-outline"
-            />
-          </View>
-        </View>
-
-        {/* Section 2: Cohorts Data */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Cohorts Data</Text>
-          <View style={styles.cardGrid}>
-            <CountCard
-              title="Total Cohort"
-              count={data?.cohorts?.total ?? 0}
-              iconName="people-outline"
-            />
-            <CountCard
-              title="Total Active Cohort"
-              count={data?.cohorts?.active ?? 0}
-              iconName="people-outline"
-            />
-          </View>
-        </View>
-
-        {/* Section 3: Students Data */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Students Data</Text>
-          <View style={styles.cardGrid}>
-            <CountCard
-              title="Total Students"
-              count={data?.students?.total ?? 0}
-              iconName="account-school-outline"
-            />
-            <CountCard
-              title="Total Enrolled Students"
-              count={data?.students?.approved ?? 0}
-              iconName="account-school-outline"
-            />
-            <CountCard
-              title="Total Certifications"
-              count={data?.certificates?.total ?? 0}
-              iconName="ribbon-outline"
-            />
-            <CountCard
-              title="Total Capstone Projects"
-              count={data?.capstones?.total ?? 0}
-              iconName="file-code"
-            />
-          </View>
-        </View>
+        <DashboardMetrics data={data} />
 
         <UnivsersityActivityTable />
       </ScrollView>
