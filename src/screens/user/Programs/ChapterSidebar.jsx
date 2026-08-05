@@ -19,11 +19,11 @@ export default function ChapterSidebar({
   fetchProgram,
   fetchChapterContent,
   fetchTopicContent,
+  closeSidebar,
 }) {
   const [openChapter, setOpenChapter] = useState(null);
 
   const chapters = program || [];
-  console.log("Chapters in Sidebar:", chapters);
 
   const handleAddTopic = (chapterId) => {
     setSelectedChapter(null);
@@ -36,6 +36,7 @@ export default function ChapterSidebar({
     });
     setMode("topic");
     setIsEditing(true);
+    closeSidebar();
   };
 
   const handleDeleteChapter = (chapterId) => {
@@ -68,18 +69,26 @@ export default function ChapterSidebar({
 
   return (
     <ScrollView style={styles.container}>
-      {chapters.map((chapter,index) => {
-        const isOpen = openChapter === chapter.chapter_id;
+      {chapters.map((chapter, index) => {
+        const chapterId = chapter.chapter_id || chapter._id;
+        const isOpen = openChapter === chapterId;
+
         return (
-          <View key={chapter.chapter_id || index} style={styles.chapterCard}>
+          <View key={chapterId || index} style={styles.chapterCard}>
             <TouchableOpacity
               style={[styles.chapterHeader, isOpen && styles.activeChapterHeader]}
               onPress={() => {
-                setOpenChapter(isOpen ? null : chapter.chapter_id);
-                fetchChapterContent(chapter.chapter_id);
-                setSelectedTopic(null);
-                setMode("chapter");
-                setIsEditing(false);
+                if (isOpen) {
+                  // Rule 2: Clicking the open chapter again closes the modal
+                  closeSidebar();
+                } else {
+                  // Expanding a new chapter keeps modal open
+                  setOpenChapter(chapterId);
+                  fetchChapterContent(chapterId);
+                  setSelectedTopic(null);
+                  setMode("chapter");
+                  setIsEditing(false);
+                }
               }}
             >
               <View style={styles.row}>
@@ -94,11 +103,14 @@ export default function ChapterSidebar({
               </View>
 
               <View style={styles.row}>
+                {/* Pencil Edit Icon -> Closes modal */}
                 <TouchableOpacity
-                  onPress={() => {
-                    fetchChapterContent(chapter.chapter_id);
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    fetchChapterContent(chapterId);
                     setMode("chapter");
                     setIsEditing(true);
+                    closeSidebar();
                   }}
                   style={styles.iconBtn}
                 >
@@ -106,7 +118,10 @@ export default function ChapterSidebar({
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={() => handleDeleteChapter(chapter.chapter_id)}
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    handleDeleteChapter(chapterId);
+                  }}
                   style={styles.iconBtn}
                 >
                   <Ionicons name="trash-outline" size={16} color="#ef4444" />
@@ -114,49 +129,57 @@ export default function ChapterSidebar({
               </View>
             </TouchableOpacity>
 
+            {/* Topics Nested Items */}
             {isOpen && (
               <View style={styles.topicContainer}>
-                {chapter.topics?.map((topic, tIndex) => (
-                  <View key={topic.topic_id || tIndex} style={styles.topicRow}>
-                    <TouchableOpacity
-                      style={{ flex: 1 }}
-                      onPress={() => {
-                        fetchTopicContent(topic.topic_id);
-                        setSelectedTopic(topic);
-                        setMode("topic");
-                        setIsEditing(false);
-                      }}
-                    >
-                      <Text style={styles.topicTitle}>
-                        {index + 1}.{tIndex + 1} {topic.title || topic.topic_name}
-                      </Text>
-                    </TouchableOpacity>
-
-                    <View style={styles.row}>
+                {chapter.topics?.map((topic, tIndex) => {
+                  const topicId = topic.topic_id || topic._id;
+                  return (
+                    <View key={topicId || tIndex} style={styles.topicRow}>
+                      {/* Selecting Topic -> Fetches content & Closes Modal */}
                       <TouchableOpacity
+                        style={{ flex: 1 }}
                         onPress={() => {
-                          fetchTopicContent(topic.topic_id);
+                          fetchTopicContent(topicId);
+                          setSelectedTopic(topic);
                           setMode("topic");
-                          setIsEditing(true);
+                          setIsEditing(false);
+                          closeSidebar();
                         }}
-                        style={styles.iconBtn}
                       >
-                        <Ionicons name="pencil" size={14} color="#000" />
+                        <Text style={styles.topicTitle}>
+                          {index + 1}.{tIndex + 1} {topic.title || topic.topic_name}
+                        </Text>
                       </TouchableOpacity>
 
-                      <TouchableOpacity
-                        onPress={() => handleDeleteTopic(topic.topic_id)}
-                        style={styles.iconBtn}
-                      >
-                        <Ionicons name="trash-outline" size={14} color="#ef4444" />
-                      </TouchableOpacity>
+                      <View style={styles.row}>
+                        {/* Topic Pencil Edit -> Closes Modal */}
+                        <TouchableOpacity
+                          onPress={() => {
+                            fetchTopicContent(topicId);
+                            setMode("topic");
+                            setIsEditing(true);
+                            closeSidebar();
+                          }}
+                          style={styles.iconBtn}
+                        >
+                          <Ionicons name="pencil" size={14} color="#000" />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          onPress={() => handleDeleteTopic(topicId)}
+                          style={styles.iconBtn}
+                        >
+                          <Ionicons name="trash-outline" size={14} color="#ef4444" />
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                  </View>
-                ))}
+                  );
+                })}
 
                 <TouchableOpacity
                   style={styles.addTopicBtn}
-                  onPress={() => handleAddTopic(chapter.chapter_id)}
+                  onPress={() => handleAddTopic(chapterId)}
                 >
                   <Ionicons name="add-circle-outline" size={18} color="#2563eb" />
                   <Text style={styles.addTopicText}>Topic</Text>
@@ -173,6 +196,7 @@ export default function ChapterSidebar({
           setMode("chapter");
           setSelectedChapter(null);
           setIsEditing(true);
+          closeSidebar();
         }}
       >
         <Ionicons name="add-circle" size={20} color="#fff" />
@@ -187,7 +211,7 @@ const styles = StyleSheet.create({
   chapterCard: { marginBottom: 10, borderRadius: 8, backgroundColor: "#fff", borderWidth: 1, borderColor: "#f3f4f6" },
   chapterHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 12, backgroundColor: "#f9fafb" },
   activeChapterHeader: { backgroundColor: "#e0e7ff" },
-  chapterTitle: { fontSize: 14, fontWeight: "600", color: "#000", marginLeft: 6 },
+  chapterTitle: { fontSize: 14, fontWeight: "600", color: "#000", marginLeft: 6, flex: 1 },
   row: { flexDirection: "row", alignItems: "center" },
   iconBtn: { padding: 4, marginLeft: 8 },
   topicContainer: { paddingLeft: 24, paddingRight: 12, paddingVertical: 8, backgroundColor: "#fff" },

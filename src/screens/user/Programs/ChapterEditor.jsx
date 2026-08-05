@@ -93,18 +93,19 @@ export default function ChapterEditor({
 
   return (
     <ProgramContentEditor
-      title={title}
-      setTitle={setTitle}
-      subTitle={subTitle}
-      setSubTitle={setSubTitle}
-      description={description}
-      setDescription={setDescription}
-      onDraft={handleDraft}
-      onCancel={handleCancel}
-      isEditing={isEditing}
-      titleLabel="Chapter Name"
-      publishProgram={handlePublishProgram}
-      isNew={!chapter}
-    />
+    title={title}
+    setTitle={setTitle}
+    subTitle={subTitle}
+    setSubTitle={setSubTitle}
+    description={description}
+    setDescription={setDescription}
+    onDraft={handleDraft}
+    onCancel={handleCancel}
+    isEditing={isEditing}
+    setIsEditing={setIsEditing}
+    titleLabel="Chapter Name"
+    publishProgram={handlePublishProgram}
+    isNew={!chapter}
+  />
   );
 }

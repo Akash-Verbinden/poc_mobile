@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import Toast from "react-native-toast-message";
-import ProgramContentEditor from "./ProgramContentEditor";
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import Toast from 'react-native-toast-message';
+import ProgramContentEditor from './ProgramContentEditor';
 import {
   createTopic,
   updateTopic,
   publishProgram,
-} from "../../../services/allServices";
+} from '../../../services/allServices';
 
 export default function TopicEditor({
   topic,
@@ -16,15 +16,15 @@ export default function TopicEditor({
   setIsEditing,
   navigation,
 }) {
-  const [title, setTitle] = useState("");
-  const [subTitle, setSubTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState('');
+  const [subTitle, setSubTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     if (topic) {
-      setTitle(topic.topic_name || "");
-      setSubTitle(topic.sub_title || "");
-      setDescription(topic.description || "");
+      setTitle(topic.topic_name || '');
+      setSubTitle(topic.sub_title || '');
+      setDescription(topic.description || '');
     }
   }, [topic]);
 
@@ -46,7 +46,7 @@ export default function TopicEditor({
     }
 
     if (res?.success) {
-      Toast.show({ type: "success", text1: res.message || "Topic saved" });
+      Toast.show({ type: 'success', text1: res.message || 'Topic saved' });
       setIsEditing(false);
       await fetchProgram();
     }
@@ -54,9 +54,9 @@ export default function TopicEditor({
 
   const handleCancel = () => {
     if (topic) {
-      setTitle(topic.topic_name || "");
-      setSubTitle(topic.sub_title || "");
-      setDescription(topic.description || "");
+      setTitle(topic.topic_name || '');
+      setSubTitle(topic.sub_title || '');
+      setDescription(topic.description || '');
     }
     setIsEditing(false);
   };
@@ -65,10 +65,10 @@ export default function TopicEditor({
     if (!programId) return;
     const res = await publishProgram(programId);
     if (res?.success) {
-      Toast.show({ type: "success", text1: res.message });
+      Toast.show({ type: 'success', text1: res.message });
       navigation.goBack();
     } else {
-      Toast.show({ type: "error", text1: res?.message });
+      Toast.show({ type: 'error', text1: res?.message });
     }
   };
 
@@ -91,6 +91,7 @@ export default function TopicEditor({
       onDraft={handleDraft}
       onCancel={handleCancel}
       isEditing={isEditing}
+      setIsEditing={setIsEditing}
       titleLabel="Topic Name"
       publishProgram={handlePublishProgram}
       isNew={topic.isNew}
@@ -99,6 +100,6 @@ export default function TopicEditor({
 }
 
 const styles = StyleSheet.create({
-  center: { flex: 1, justifyContent: "center", alignItems: "center" },
-  emptyText: { color: "#6b7280", fontSize: 16 },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  emptyText: { color: '#6b7280', fontSize: 16 },
 });

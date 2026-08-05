@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,80 +7,86 @@ import {
   Modal,
   StyleSheet,
   ActivityIndicator,
-} from "react-native";
-import Ionicons from "@react-native-vector-icons/ionicons";
-import Toast from "react-native-toast-message";
-import ChapterSidebar from "./ChapterSidebar";
-import ChapterEditor from "./ChapterEditor";
-import TopicEditor from "./TopicEditor";
+} from 'react-native';
+import Ionicons from '@react-native-vector-icons/ionicons';
+import Toast from 'react-native-toast-message';
+import ChapterSidebar from './ChapterSidebar';
+import ChapterEditor from './ChapterEditor';
+import TopicEditor from './TopicEditor';
 
 import {
   getProgramTree,
   getChapterContents,
   getTopicContents,
-} from "../../../services/allServices";
+} from '../../../services/allServices';
 
 export default function ProgramBuilder({ route, navigation }) {
-  const programId  = route?.params?.id || {};
+  const programId = route?.params?.id || {};
 
   const [program, setProgram] = useState([]);
-  const [programName, setProgramName] = useState("");
+  const [programName, setProgramName] = useState('');
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [selectedChapter, setSelectedChapter] = useState(null);
-  const [mode, setMode] = useState("chapter");
+  const [mode, setMode] = useState('chapter');
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
-  
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  console.log("Program ID:", programId);
+  console.log('Program ID:', programId);
+
   const fetchProgram = async () => {
     try {
       setLoading(true);
       const res = await getProgramTree(programId);
-      console.log("Program Tree Response:", res);
+      console.log('Program Tree Response:', res);
       if (res?.success) {
         setProgram(res.data.chapters);
         setProgramName(res.data.program_name);
         if (res.data.chapters?.length > 0) {
-          await fetchChapterContent(res.data.chapters[0].chapter_id);
+          const firstChapterId =
+            res.data.chapters[0].chapter_id || res.data.chapters[0]._id;
+          await fetchChapterContent(firstChapterId);
         }
         setIsEditing(false);
       } else {
-        Toast.show({ type: "error", text1: res?.message || "Failed to fetch tree" });
+        Toast.show({
+          type: 'error',
+          text1: res?.message || 'Failed to fetch tree',
+        });
       }
     } catch (error) {
-      Toast.show({ type: "error", text1: "Failed to load program tree." });
+      Toast.show({ type: 'error', text1: 'Failed to load program tree.' });
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchChapterContent = async (chapterId) => {
+  const fetchChapterContent = async chapterId => {
     setLoading(true);
     try {
       const res = await getChapterContents(chapterId);
       if (res?.success) {
         setSelectedChapter(res.data);
-        setMode("chapter");
+        setMode('chapter');
       }
     } catch (error) {
-      Toast.show({ type: "error", text1: "Failed to load chapter content" });
+      Toast.show({ type: 'error', text1: 'Failed to load chapter content' });
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchTopicContent = async (topicId) => {
+  const fetchTopicContent = async topicId => {
     setLoading(true);
     try {
       const res = await getTopicContents(topicId);
       if (res?.success) {
         setSelectedTopic(res.data);
-        setMode("topic");
+        setMode('topic');
       }
     } catch (error) {
-      Toast.show({ type: "error", text1: "Failed to load topic content" });
+      Toast.show({ type: 'error', text1: 'Failed to load topic content' });
     } finally {
       setLoading(false);
     }
@@ -100,14 +106,17 @@ export default function ProgramBuilder({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Top Mobile Bar */}
+      {/* Top Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.navBtn} onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={styles.navBtn}
+          onPress={() => navigation.goBack()}
+        >
           <Ionicons name="arrow-back" size={22} color="#000" />
         </TouchableOpacity>
 
         <Text style={styles.headerTitle} numberOfLines={1}>
-          {programName || "Program Builder"}
+          {programName || 'Program Builder'}
         </Text>
 
         <TouchableOpacity
@@ -121,7 +130,7 @@ export default function ProgramBuilder({ route, navigation }) {
 
       {/* Editor Surface */}
       <View style={styles.editorContainer}>
-        {mode === "chapter" && (
+        {mode === 'chapter' && (
           <ChapterEditor
             program={program}
             chapter={selectedChapter}
@@ -134,7 +143,7 @@ export default function ProgramBuilder({ route, navigation }) {
           />
         )}
 
-        {mode === "topic" && (
+        {mode === 'topic' && (
           <TopicEditor
             topic={selectedTopic}
             programId={programId}
@@ -146,7 +155,7 @@ export default function ProgramBuilder({ route, navigation }) {
         )}
       </View>
 
-      {/* Slide-over Structure Drawer Sheet */}
+      {/* Structure Modal Sheet */}
       <Modal
         visible={isSidebarOpen}
         animationType="slide"
@@ -157,30 +166,25 @@ export default function ProgramBuilder({ route, navigation }) {
           <View style={styles.sidebarSheet}>
             <View style={styles.sheetHeader}>
               <Text style={styles.sheetTitle}>Chapters & Topics</Text>
-              <TouchableOpacity onPress={() => setIsSidebarOpen(false)}>
-                <Ionicons name="close" size={24} color="#000" />
+              <TouchableOpacity
+                style={styles.doneBtn}
+                onPress={() => setIsSidebarOpen(false)}
+              >
+                <Text style={styles.doneBtnText}>Done</Text>
+                <Ionicons name="close" size={20} color="#2563eb" />
               </TouchableOpacity>
             </View>
-
             <ChapterSidebar
               program={program}
               setProgram={setProgram}
               setSelectedTopic={setSelectedTopic}
               setSelectedChapter={setSelectedChapter}
-              setMode={(m) => {
-                setMode(m);
-                setIsSidebarOpen(false);
-              }}
+              setMode={setMode}
               setIsEditing={setIsEditing}
               fetchProgram={fetchProgram}
-              fetchChapterContent={(id) => {
-                fetchChapterContent(id);
-                setIsSidebarOpen(false);
-              }}
-              fetchTopicContent={(id) => {
-                fetchTopicContent(id);
-                setIsSidebarOpen(false);
-              }}
+              fetchChapterContent={fetchChapterContent}
+              fetchTopicContent={fetchTopicContent}
+              closeSidebar={() => setIsSidebarOpen(false)} 
             />
           </View>
         </View>
@@ -190,25 +194,64 @@ export default function ProgramBuilder({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f9fafb" },
-  center: { flex: 1, justifyContent: "center", alignItems: "center" },
+  container: { flex: 1, backgroundColor: '#f9fafb' },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
+    borderBottomColor: '#e5e7eb',
   },
   navBtn: { padding: 4 },
-  headerTitle: { fontSize: 16, fontWeight: "600", color: "#000", flex: 1, marginHorizontal: 12 },
-  menuBtn: { flexDirection: "row", alignItems: "center", gap: 4, backgroundColor: "#eff6ff", paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8 },
-  menuBtnText: { color: "#2563eb", fontWeight: "600", fontSize: 13 },
+  headerTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#000',
+    flex: 1,
+    marginHorizontal: 12,
+  },
+  menuBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#eff6ff',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  menuBtnText: { color: '#2563eb', fontWeight: '600', fontSize: 13 },
   editorContainer: { flex: 1 },
-  modalOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.4)", justifyContent: "flex-end" },
-  sidebarSheet: { height: "80%", backgroundColor: "#fff", borderTopLeftRadius: 16, borderTopRightRadius: 16, padding: 16 },
-  sheetHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 },
-  sheetTitle: { fontSize: 18, fontWeight: "bold", color: "#000" },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'flex-end',
+  },
+  sidebarSheet: {
+    height: '80%',
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    padding: 16,
+  },
+  sheetHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  sheetTitle: { fontSize: 18, fontWeight: 'bold', color: '#000' },
+  doneBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#eff6ff',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 6,
+  },
+  doneBtnText: { color: '#2563eb', fontWeight: '600', fontSize: 13 },
 });
