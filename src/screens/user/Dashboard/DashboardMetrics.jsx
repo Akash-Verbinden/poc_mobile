@@ -70,7 +70,7 @@ const DashboardMetrics = ({ data }) => {
           <CountCard
             title="Total Capstone Projects"
             count={data?.capstones?.total ?? 0}
-            iconName="file-code"
+            iconName="document-text-outline"
           />
         </View>
       </View>

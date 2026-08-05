@@ -239,14 +239,14 @@ const styles = StyleSheet.create({
 
   button: {
   backgroundColor: '#007AFF',
-  paddingVertical: 14,          // Slightly increased for a better tap target
+  paddingVertical: 14,         
   paddingHorizontal: 24,
   borderRadius: 8,
   elevation: 3,
-  flexDirection: 'row',         // Aligns text and icon side-by-side
-  alignItems: 'center',         // Perfectly vertical aligns items in center
-  justifyContent: 'center',     // Centers items horizontally across the button
-  gap: 10,                      // Controls the space between text and icon
+  flexDirection: 'row',         
+  alignItems: 'center',        
+  justifyContent: 'center',     
+  gap: 10,                      
 },
 buttonPressed: {
   backgroundColor: '#0051A8',
@@ -256,7 +256,7 @@ buttonText: {
   color: '#FFFFFF',
   fontSize: 16,
   fontWeight: 'bold',
-  textTransform: 'uppercase',   // Removed layout items (gap, flexDirection, textAlign)
+  textTransform: 'uppercase',  
 },
 });
 

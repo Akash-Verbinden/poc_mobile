@@ -188,6 +188,14 @@ export const updateTopic = async (topicId, payload) => {
 
 // Email Templates
 
+// Create Email Template
+export const createEmailTemplate = async (
+  payload,
+) => {
+  const res = await api.post("/superadmin/email-template", payload);
+  return res.data;
+};
+
 // Get Email Templates
 export const getEmailTemplates = async () => {
   const payload = {
@@ -209,7 +217,29 @@ export const getEmailTemplates = async () => {
 
 // Create Email Template
 export const deleteEmailTemplate = async (template_id) => {
-  const res = await api.delete(`/superadmin/email-templates/${template_id}`);
+  const res = await apiService.delete(`/superadmin/email-templates/${template_id}`);
   return res.data;
 };
 
+// Get Email Template Details
+export const getUniversityUsers = async (payload) => {
+  const res = await apiService.post(
+    "/superadmin/communication/university-users",
+    payload,
+  );
+
+  return res.data;
+};
+
+
+// Share bulk email
+export const bulkShareEmail = async (payload) => {
+  const res = await apiService.post("/superadmin/communication/bulk-share", payload);
+  return res.data;
+};
+
+// Get Email Template
+export const getEmailTemplate = async (template_id) => {
+  const res = await apiService.get(`/superadmin/email-templates/${template_id}`);
+  return res.data;
+};

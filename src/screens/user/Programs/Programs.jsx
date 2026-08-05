@@ -6,6 +6,7 @@ import ProgramsMetrics from './ProgramsMetrics';
 import ProgramsTable from './ProgramsTable';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@react-native-vector-icons/ionicons';
+import Loader from '../../../components/Loader';
 
 const Programs = () => {
   const [metrics, setMetrics] = useState({
@@ -44,6 +45,7 @@ const Programs = () => {
 
   return (
     <View style={styles.container}>
+      <Loader visible={loading} />
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerContainer}>
           <Text style={styles.mainHeader}>
