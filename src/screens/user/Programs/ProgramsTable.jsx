@@ -206,7 +206,7 @@ export default function ProgramTable() {
 
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('programDetails', { id: row.id })
+              navigation.navigate('programBuilder', { id: row.id })
             }
           >
             <Ionicons name="eye-outline" size={16} color="#6b7280" />

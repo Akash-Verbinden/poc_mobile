@@ -25,7 +25,7 @@ const ProgramsMetrics = ({ metrics }) => {
           <CountCard
             title="Pending Distribution"
             count={metrics?.pending ?? 0}
-            iconName="clock-outline"
+            iconName="timer-sand-empty"
           />
         </View>
       </View>

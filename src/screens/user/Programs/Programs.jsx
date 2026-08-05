@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { getProgramMetrics } from '../../../services/allServices';
 import ProgramsMetrics from './ProgramsMetrics';
 import ProgramsTable from './ProgramsTable';
-import { ScrollView } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 const Programs = () => {
   const [metrics, setMetrics] = useState({
@@ -14,6 +15,8 @@ const Programs = () => {
   });
 
   const [loading, setLoading] = useState(true);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     loadMetrics();
@@ -37,14 +40,27 @@ const Programs = () => {
       setLoading(false);
     }
   };
+
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.mainHeader}>
-          List of Program Data and their Status
-        </Text>
-      <ProgramsMetrics metrics={metrics} />
-      <ProgramsTable/>
+        <View style={styles.headerContainer}>
+          <Text style={styles.mainHeader}>
+            List of Program Data and their Status
+          </Text>
+          
+          <TouchableOpacity 
+            style={styles.createButton} 
+            onPress={() => navigation.navigate('createProgram')}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.createButtonText}>+ Create Program</Text>
+          </TouchableOpacity>
+        </View>
+
+        <ProgramsMetrics metrics={metrics} />
+        <ProgramsTable />
       </ScrollView>
     </View>
   );
@@ -66,11 +82,27 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 24,
   },
+  headerContainer: {
+    marginBottom: 16,
+  },
   mainHeader: {
     fontSize: 22,
     fontWeight: '700',
     color: '#111827',
-    marginBottom: 16,
+    marginBottom: 12,
+  },
+  createButton: {
+    backgroundColor: '#2563EB', 
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  createButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
   },
   section: {
     marginBottom: 20,
