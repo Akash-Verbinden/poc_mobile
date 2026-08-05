@@ -4,7 +4,8 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 
 import UserStacks from './stacks/UserStacks';
 import Programs from '../screens/user/Programs/Programs';
-import Communication from '../screens/user/Communication';
+// import Communication from '../screens/user/Communication/Communication';
+import CommunicationStack from './stacks/CommunicationStack';
 import ProgramsStack from './stacks/ProgramsStack';
 
 const Tab = createBottomTabNavigator();
@@ -40,7 +41,6 @@ const TabNavigator = () => {
         },
       })}
     >
-      {/* 1st Tab: Dashboard Stack (Contains Dashboard + Universities + Students + etc.) */}
       <Tab.Screen
         name="dashboardTab"
         component={UserStacks}
@@ -57,7 +57,7 @@ const TabNavigator = () => {
       {/* 3rd Tab */}
       <Tab.Screen
         name="communication"
-        component={Communication}
+        component={CommunicationStack}
         options={{ tabBarLabel: 'Communication' }}
       />
     </Tab.Navigator>

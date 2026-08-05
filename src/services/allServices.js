@@ -120,7 +120,7 @@ export const getTopicContents = async topicId => {
 };
 
 // Delete Chapter
-export const deleteChapter = async (chapterId) => {
+export const deleteChapter = async chapterId => {
   const response = await apiService.delete(
     `/superadmin/programs/chapters/${chapterId}`,
   );
@@ -129,7 +129,7 @@ export const deleteChapter = async (chapterId) => {
 };
 
 // Delete Topic
-export const deleteTopic = async (topicId) => {
+export const deleteTopic = async topicId => {
   const response = await apiService.delete(
     `/superadmin/programs/chapters/topics/${topicId}`,
   );
@@ -138,8 +138,11 @@ export const deleteTopic = async (topicId) => {
 };
 
 // Create Chapter
-export const createChapter = async (payload) => {
-  const response = await apiService.post("/superadmin/programs/chapters", payload);
+export const createChapter = async payload => {
+  const response = await apiService.post(
+    '/superadmin/programs/chapters',
+    payload,
+  );
 
   return response.data;
 };
@@ -155,16 +158,18 @@ export const updateChapter = async (chapterId, payload) => {
 };
 
 // publish program
-export const publishProgram = async (program_id) => {
-  const response = await apiService.put(`/superadmin/programs/${program_id}/publish`);
+export const publishProgram = async program_id => {
+  const response = await apiService.put(
+    `/superadmin/programs/${program_id}/publish`,
+  );
 
   return response.data;
 };
 
 // Create Topic
-export const createTopic = async (payload) => {
+export const createTopic = async payload => {
   const response = await apiService.post(
-    "/superadmin/programs/chapters/topics",
+    '/superadmin/programs/chapters/topics',
     payload,
   );
 
@@ -180,3 +185,31 @@ export const updateTopic = async (topicId, payload) => {
 
   return response.data;
 };
+
+// Email Templates
+
+// Get Email Templates
+export const getEmailTemplates = async () => {
+  const payload = {
+    search: '',
+    page: 1,
+    page_size: 10,
+    sort_order: -1,
+    filter: {},
+    sort_by: 'created_at',
+  };
+
+  const res = await apiService.post(
+    '/superadmin/email-templates/list',
+    payload,
+  );
+
+  return res.data;
+};
+
+// Create Email Template
+export const deleteEmailTemplate = async (template_id) => {
+  const res = await api.delete(`/superadmin/email-templates/${template_id}`);
+  return res.data;
+};
+

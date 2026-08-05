@@ -5,6 +5,7 @@ import { getProgramMetrics } from '../../../services/allServices';
 import ProgramsMetrics from './ProgramsMetrics';
 import ProgramsTable from './ProgramsTable';
 import { useNavigation } from '@react-navigation/native';
+import Ionicons from '@react-native-vector-icons/ionicons';
 
 const Programs = () => {
   const [metrics, setMetrics] = useState({
@@ -41,7 +42,6 @@ const Programs = () => {
     }
   };
 
-
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -49,13 +49,14 @@ const Programs = () => {
           <Text style={styles.mainHeader}>
             List of Program Data and their Status
           </Text>
-          
-          <TouchableOpacity 
-            style={styles.createButton} 
+
+          <TouchableOpacity
+            style={styles.createButton}
             onPress={() => navigation.navigate('createProgram')}
             activeOpacity={0.8}
           >
-            <Text style={styles.createButtonText}>+ Create Program</Text>
+            <Ionicons name="add-circle-outline" size={16} color="#ffffff" />
+            <Text style={styles.createButtonText}>Create Program</Text>
           </TouchableOpacity>
         </View>
 
@@ -92,7 +93,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   createButton: {
-    backgroundColor: '#2563EB', 
+    flexDirection: 'row',
+    gap: 5,
+    backgroundColor: '#2563EB',
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
