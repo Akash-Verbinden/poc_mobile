@@ -170,7 +170,7 @@ export default function ProgramBuilder({ route, navigation }) {
                 style={styles.doneBtn}
                 onPress={() => setIsSidebarOpen(false)}
               >
-                <Text style={styles.doneBtnText}>Done</Text>
+                <Text style={styles.doneBtnText}>Close</Text>
                 <Ionicons name="close" size={20} color="#2563eb" />
               </TouchableOpacity>
             </View>

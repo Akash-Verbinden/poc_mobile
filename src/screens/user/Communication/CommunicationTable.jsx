@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,16 +8,14 @@ import {
   ActivityIndicator,
   StyleSheet,
   Alert,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import Ionicons from "@react-native-vector-icons/ionicons";
-import CommonTable from "../../../components/CommonTable";
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Ionicons from '@react-native-vector-icons/ionicons';
+import CommonTable from '../../../components/CommonTable';
 import {
   getEmailTemplates,
   deleteEmailTemplate,
-} from "../../../services/allServices";
-
-
+} from '../../../services/allServices';
 
 export default function CommunicationTable() {
   const navigation = useNavigation();
@@ -25,8 +23,8 @@ export default function CommunicationTable() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -52,7 +50,7 @@ export default function CommunicationTable() {
       const res = await getEmailTemplates();
 
       if (res.success) {
-        const formatted = res.data.results.map((t) => ({
+        const formatted = res.data.results.map(t => ({
           id: t.id,
           template_name: t.template_name,
           template_subject: t.template_subject,
@@ -69,7 +67,7 @@ export default function CommunicationTable() {
       }
     } catch (err) {
       console.error(err);
-      Alert.alert("Error", "Failed to fetch templates");
+      Alert.alert('Error', 'Failed to fetch templates');
     } finally {
       setLoading(false);
     }
@@ -86,8 +84,8 @@ export default function CommunicationTable() {
       return;
     }
 
-    const filtered = data.filter((item) =>
-      item.template_name.toLowerCase().includes(debouncedSearch)
+    const filtered = data.filter(item =>
+      item.template_name.toLowerCase().includes(debouncedSearch),
     );
 
     setFilteredData(filtered);
@@ -95,7 +93,7 @@ export default function CommunicationTable() {
   }, [debouncedSearch, data]);
 
   /* ---------------- Delete Template ---------------- */
-  const openDeleteModal = (id) => {
+  const openDeleteModal = id => {
     setSelectedId(id);
     setShowDeleteModal(true);
   };
@@ -109,15 +107,15 @@ export default function CommunicationTable() {
       const res = await deleteEmailTemplate(selectedId);
 
       if (res.success) {
-        Alert.alert("Success", res.message || "Template deleted successfully");
+        Alert.alert('Success', res.message || 'Template deleted successfully');
         fetchTemplates();
       } else {
-        Alert.alert("Error", res.message || "Delete failed");
+        Alert.alert('Error', res.message || 'Delete failed');
       }
     } catch (e) {
       Alert.alert(
-        "Error",
-        e?.response?.data?.message || "Server error while deleting"
+        'Error',
+        e?.response?.data?.message || 'Server error while deleting',
       );
     } finally {
       setDeleteLoading(false);
@@ -129,57 +127,43 @@ export default function CommunicationTable() {
   /* ---------------- Column Definitions ---------------- */
   const columns = [
     {
-      name: "Template Name",
-      selector: (row) => row.template_name,
+      name: 'Template Name',
+      selector: row => row.template_name,
       width: 180,
     },
     {
-      name: "Subject",
-      selector: (row) => row.template_subject,
+      name: 'Subject',
+      selector: row => row.template_subject,
       width: 180,
     },
     {
-      name: "Created Date",
-      selector: (row) => row.created_at,
+      name: 'Created Date',
+      selector: row => row.created_at,
       center: true,
       width: 120,
     },
     {
       name: (
-        <Text style={styles.headerMultilineText}>
-          Total Emails{"\n"}Sent
-        </Text>
+        <Text style={styles.headerMultilineText}>Total Emails{'\n'}Sent</Text>
       ),
       center: true,
       width: 110,
-      cell: (row) => (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("UsageDetails", { id: row.id })
-          }
-        >
-          <Text style={styles.linkText}>{row.email_count || 0}</Text>
-        </TouchableOpacity>
-      ),
+      cell: row => <Text style={styles.linkText}>{row.email_count || 0}</Text>,
     },
     {
-      name: "Opened",
+      name: 'Opened',
       center: true,
       width: 90,
-      cell: (row) => (
-        <Text style={styles.cellText}>{row.opened}</Text>
-      ),
+      cell: row => <Text style={styles.cellText}>{row.opened}</Text>,
     },
     {
-      name: "Action",
+      name: 'Action',
       center: true,
       width: 100,
-      cell: (row) => (
+      cell: row => (
         <View style={styles.actionCell}>
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("EditTemplate", { id: row.id })
-            }
+            onPress={() => navigation.navigate('editTemplate', { id: row.id })}
           >
             <Ionicons name="pencil-outline" size={16} color="#2563eb" />
           </TouchableOpacity>
@@ -193,7 +177,7 @@ export default function CommunicationTable() {
 
   const paginatedData = filteredData.slice(
     (page - 1) * pageSize,
-    page * pageSize
+    page * pageSize,
   );
 
   return (
@@ -225,7 +209,7 @@ export default function CommunicationTable() {
         totalRows={filteredData.length}
         page={page}
         pageSize={pageSize}
-        onPageChange={(newPage) => setPage(newPage)}
+        onPageChange={newPage => setPage(newPage)}
       />
 
       {/* Delete Confirmation Modal */}
@@ -272,109 +256,109 @@ export default function CommunicationTable() {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     borderRadius: 12,
     padding: 16,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 3,
     elevation: 2,
   },
   searchContainer: {
-    alignItems: "flex-end",
+    alignItems: 'flex-end',
     marginBottom: 16,
   },
   inputWrapper: {
-    position: "relative",
+    position: 'relative',
     width: 250,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   searchInput: {
     borderWidth: 1,
-    borderColor: "#e9e9e9",
+    borderColor: '#e9e9e9',
     borderRadius: 6,
     paddingVertical: 8,
     paddingLeft: 12,
     paddingRight: 36,
     fontSize: 13,
-    color: "#000000",
+    color: '#000000',
   },
   searchIcon: {
-    position: "absolute",
+    position: 'absolute',
     right: 10,
   },
   headerMultilineText: {
     fontSize: 12,
-    fontWeight: "600",
-    color: "#4b5563",
-    textAlign: "center",
+    fontWeight: '600',
+    color: '#4b5563',
+    textAlign: 'center',
   },
   linkText: {
-    color: "#2563eb",
-    fontWeight: "600",
-    textDecorationLine: "underline",
+    color: '#2563eb',
+    fontWeight: '600',
+    textDecorationLine: 'underline',
     fontSize: 13,
   },
   cellText: {
     fontSize: 13,
-    color: "#374151",
+    color: '#374151',
   },
   actionCell: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 16,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 24,
     width: 320,
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: "600",
-    color: "#000000",
+    fontWeight: '600',
+    color: '#000000',
   },
   modalSubTitle: {
     fontSize: 14,
-    color: "#6b7280",
+    color: '#6b7280',
     marginTop: 8,
   },
   modalActions: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
     gap: 12,
     marginTop: 24,
   },
   cancelBtn: {
     paddingHorizontal: 16,
     paddingVertical: 10,
-    backgroundColor: "#e5e7eb",
+    backgroundColor: '#e5e7eb',
     borderRadius: 8,
   },
   cancelBtnText: {
-    color: "#000000",
+    color: '#000000',
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   deleteBtn: {
     paddingHorizontal: 16,
     paddingVertical: 10,
-    backgroundColor: "#dc2626",
+    backgroundColor: '#dc2626',
     borderRadius: 8,
     minWidth: 70,
-    alignItems: "center",
+    alignItems: 'center',
   },
   deleteBtnText: {
-    color: "#ffffff",
+    color: '#ffffff',
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
 });

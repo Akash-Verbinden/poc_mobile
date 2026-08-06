@@ -55,12 +55,12 @@ const DashboardMetrics = ({ data }) => {
           <CountCard
             title="Total Students"
             count={data?.students?.total ?? 0}
-            iconName="account-school-outline"
+            iconName="school-outline"
           />
           <CountCard
             title="Total Enrolled Students"
             count={data?.students?.approved ?? 0}
-            iconName="account-school-outline"
+            iconName="school-outline"
           />
           <CountCard
             title="Total Certifications"

@@ -196,6 +196,18 @@ export const createEmailTemplate = async (
   return res.data;
 };
 
+// Update Email Template
+export const updateEmailTemplate = async (
+  template_id,
+  payload
+) => {
+  const res = await api.put(
+    `/superadmin/email-templates/${template_id}`,
+    payload,
+  );
+  return res.data;
+};
+
 // Get Email Templates
 export const getEmailTemplates = async () => {
   const payload = {
