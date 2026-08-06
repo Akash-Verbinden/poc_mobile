@@ -192,7 +192,7 @@ export const updateTopic = async (topicId, payload) => {
 export const createEmailTemplate = async (
   payload,
 ) => {
-  const res = await api.post("/superadmin/email-template", payload);
+  const res = await apiService.post("/superadmin/email-template", payload);
   return res.data;
 };
 
