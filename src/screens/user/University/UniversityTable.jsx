@@ -16,7 +16,7 @@ import {
   deleteUniversity,
   updateUniversityStatus,
 } from '../../../services/allServices';
-import SwitchButton from '../../../components/SwitchButton';
+import SwitchButton from '../../../components/Buttons/SwitchButton';
 import StatusConfirmModal from '../../../components/StatusConfirmModal';
 
 export default function UniversityTable({ navigation }) {
@@ -86,7 +86,7 @@ export default function UniversityTable({ navigation }) {
       const response = await deleteUniversity(deleteModal.id);
       if (response?.success) {
         Alert.alert('Success', response.message || 'University deleted');
-        setData((prev) => prev.filter((item) => item.id !== deleteModal.id));
+        setData(prev => prev.filter(item => item.id !== deleteModal.id));
       } else {
         Alert.alert('Error', 'Delete failed');
       }
@@ -118,42 +118,42 @@ export default function UniversityTable({ navigation }) {
   const columns = [
     {
       name: 'University Name',
-      selector: (row) => row.name,
+      selector: row => row.name,
       width: 180,
     },
     {
       name: 'University Code',
-      selector: (row) => row.code,
+      selector: row => row.code,
       width: 140,
       center: true,
     },
     {
       name: 'Total Programs',
-      selector: (row) => row.program_count,
+      selector: row => row.program_count,
       width: 130,
       center: true,
     },
     {
       name: 'Created Date',
-      selector: (row) => row.created_at,
+      selector: row => row.created_at,
       width: 140,
       center: true,
     },
     {
       name: 'Admin',
-      selector: (row) => `${row.admin_firstname} ${row.admin_lastname}`,
+      selector: row => `${row.admin_firstname} ${row.admin_lastname}`,
       width: 160,
       center: true,
     },
     {
       name: 'Contact',
-      selector: (row) => row.contact,
+      selector: row => row.contact,
       width: 140,
       center: true,
     },
     {
       name: 'Email Address',
-      selector: (row) => row.email,
+      selector: row => row.email,
       width: 220,
       center: true,
     },
@@ -161,29 +161,29 @@ export default function UniversityTable({ navigation }) {
       name: 'Status',
       width: 140,
       center: true,
-      cell: (row) => {
+      cell: row => {
         const isActive = row.status === 'active';
         return (
-            <SwitchButton
-              value={isActive}
-              onValueChange={() =>
-                setStatusModal({
-                  open: true,
-                  row,
-                  status: isActive ? 'inactive' : 'active',
-                })
-              }
-              activeText="Active"
-              inactiveText="Inactive"
-            />
-          );
-        }
+          <SwitchButton
+            value={isActive}
+            onValueChange={() =>
+              setStatusModal({
+                open: true,
+                row,
+                status: isActive ? 'inactive' : 'active',
+              })
+            }
+            activeText="Active"
+            inactiveText="Inactive"
+          />
+        );
+      },
     },
     {
       name: 'Action',
       width: 100,
       center: true,
-      cell: (row) => (
+      cell: row => (
         <View style={styles.actionRow}>
           <TouchableOpacity
             onPress={() =>
@@ -230,12 +230,12 @@ export default function UniversityTable({ navigation }) {
         totalRows={totalRows}
         page={page}
         pageSize={10}
-        onPageChange={(p) => setPage(p)}
+        onPageChange={p => setPage(p)}
       />
 
       {/* Status Modal */}
 
-      <StatusConfirmModal 
+      <StatusConfirmModal
         visible={statusModal.open}
         type="confirm"
         title="Update University Status"

@@ -20,6 +20,7 @@ import {
   getEmailTemplate,
 } from '../../../services/allServices';
 import Loader from '../../../components/Loader';
+import BackButton from '../../../components/Buttons/BackButton';
 
 const audienceOptions = ['student', 'university', 'faculty'];
 
@@ -197,14 +198,7 @@ export default function BulkEmailPage() {
       <Pressable onPress={closeAllDropdowns} style={styles.pressableContainer}>
         {/* Top Header */}
         <View style={styles.headerRow}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backBtn}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="arrow-back" size={20} color="#000" />
-            <Text style={styles.backText}>Back to Template List</Text>
-          </TouchableOpacity>
+          <BackButton title="Back to Template List" />
 
           <Text style={styles.headerTitle}>Bulk Email Communication</Text>
         </View>

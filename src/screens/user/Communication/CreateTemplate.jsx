@@ -16,6 +16,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import RichTextEditor from '../../../components/RichTextEditor';
 import { createEmailTemplate } from '../../../services/allServices';
+import BackButton from '../../../components/Buttons/BackButton';
 
 /* ---------------- Schema ---------------- */
 const schema = z.object({
@@ -81,14 +82,7 @@ export default function CreateTemplatePage() {
     >
       {/* Top Header */}
       <View style={styles.headerRow}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backBtn}
-          activeOpacity={0.7}
-        >
-          <Ionicons name="arrow-back" size={20} color="#000" />
-          <Text style={styles.backText}>Back to Template List</Text>
-        </TouchableOpacity>
+        <BackButton title="Back to Template List" />
 
         <Text style={styles.headerTitle}>Create Template</Text>
       </View>
@@ -215,18 +209,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 4,
     gap: 16,
-  },
-  backBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingVertical: 4,
-    flexShrink: 1,
-  },
-  backText: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#000000',
   },
   headerTitle: {
     fontSize: 16,

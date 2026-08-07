@@ -18,7 +18,7 @@ import {
 } from '../../../services/allServices';
 import { useNavigation } from '@react-navigation/native';
 import StatusConfirmModal from '../../../components/StatusConfirmModal';
-import SwitchButton from '../../../components/SwitchButton';
+import SwitchButton from '../../../components/Buttons/SwitchButton';
 
 export default function ProgramTable() {
   const [data, setData] = useState([]);

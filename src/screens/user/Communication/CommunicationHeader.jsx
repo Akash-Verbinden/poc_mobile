@@ -1,7 +1,8 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Ionicons from "@react-native-vector-icons/ionicons";
+import SecondaryButton from "../../../components/Buttons/SecondaryButton";
+import PrimaryButton from "../../../components/Buttons/PrimaryButton";
 
 export default function CommunicationHeader() {
   const navigation = useNavigation();
@@ -16,24 +17,18 @@ export default function CommunicationHeader() {
 
         <View style={styles.buttonGroup}>
           {/* Bulk Email */}
-          <TouchableOpacity
+          <SecondaryButton
+            title="Bulk Email"
             onPress={() => navigation.navigate("bulkEmail")}
-            style={styles.outlineBtn}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="add-circle-outline" size={16} color="#1d4ed8" />
-            <Text style={styles.outlineBtnText}>Bulk Email</Text>
-          </TouchableOpacity>
+            iconName="add-circle-outline"
+          />
 
           {/* Create Template */}
-          <TouchableOpacity
+          <PrimaryButton
+            title="Create Template"
             onPress={() => navigation.navigate("createTemplate")}
-            style={styles.primaryBtn}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="add-circle-outline" size={16} color="#ffffff" />
-            <Text style={styles.primaryBtnText}>Create Template</Text>
-          </TouchableOpacity>
+            iconName="add-circle-outline"
+          />
         </View>
       </View>
 
