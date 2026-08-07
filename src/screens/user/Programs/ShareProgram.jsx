@@ -15,6 +15,7 @@ import {
   getProgramUniversities,
   shareProgram,
 } from "../../../services/allServices";
+import Loader from "../../../components/Loader";
 
 export default function ShareProgram({ route, navigation }) {
   const programId = route?.params?.id;
@@ -115,14 +116,6 @@ export default function ShareProgram({ route, navigation }) {
     }
   };
 
-  if (pageLoading) {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#2563eb" />
-        <Text style={styles.loadingText}>Loading Universities...</Text>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.screen}>
@@ -130,6 +123,7 @@ export default function ShareProgram({ route, navigation }) {
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
+        <Loader visible={pageLoading} />
         {/* Header Bar */}
         <View style={styles.headerBar}>
           <TouchableOpacity

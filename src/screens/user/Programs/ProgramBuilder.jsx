@@ -19,6 +19,7 @@ import {
   getChapterContents,
   getTopicContents,
 } from '../../../services/allServices';
+import Loader from '../../../components/Loader';
 
 export default function ProgramBuilder({ route, navigation }) {
   const programId = route?.params?.id || {};
@@ -96,16 +97,9 @@ export default function ProgramBuilder({ route, navigation }) {
     if (programId) fetchProgram();
   }, [programId]);
 
-  if (loading && program.length === 0) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color="#2563eb" />
-      </View>
-    );
-  }
-
   return (
     <SafeAreaView style={styles.container}>
+      <Loader visible={loading} />
       {/* Top Header */}
       <View style={styles.header}>
         <TouchableOpacity

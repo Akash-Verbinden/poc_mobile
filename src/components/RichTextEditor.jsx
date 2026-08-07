@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from "react";
+import React, { useRef, useEffect, useCallback, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { RichEditor, RichToolbar, actions } from "react-native-pell-rich-editor";
 import Toast from "react-native-toast-message";
@@ -12,14 +12,35 @@ function RichTextEditor({
   const richTextRef = useRef(null);
   const contentRef = useRef(model);
   const debounceTimerRef = useRef(null);
+  
+  const [isReady, setIsReady] = useState(false);
+  const isInitializedRef = useRef(false);
 
+  // Called when the WebView inside RichEditor is fully loaded
+  const handleEditorInitialized = () => {
+    setIsReady(true);
+  };
 
+  // Sync content when editor is ready OR when model updates externally
   useEffect(() => {
-    if (richTextRef.current && model !== contentRef.current) {
+    if (!isReady || !richTextRef.current) return;
+
+    // Case 1: Initial load when WebView becomes ready
+    if (!isInitializedRef.current) {
+      if (model) {
+        contentRef.current = model;
+        richTextRef.current.setContentHTML(model);
+      }
+      isInitializedRef.current = true;
+      return;
+    }
+
+    // Case 2: External resets (e.g. form reset, switching active record)
+    if (model !== contentRef.current) {
       contentRef.current = model;
       richTextRef.current.setContentHTML(model || "");
     }
-  }, [model]);
+  }, [model, isReady]);
 
   useEffect(() => {
     return () => {
@@ -92,7 +113,8 @@ function RichTextEditor({
       <View style={styles.editorWrapper}>
         <RichEditor
           ref={richTextRef}
-          initialContentHTML={contentRef.current}
+          initialContentHTML={model}
+          editorInitializedCallback={handleEditorInitialized}
           onChange={handleChange}
           placeholder="Write content here..."
           disabled={readOnly}

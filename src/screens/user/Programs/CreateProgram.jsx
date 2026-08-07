@@ -15,6 +15,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createProgram } from '../../../services/allServices';
 import Ionicons from '@react-native-vector-icons/ionicons';
+import Loader from '../../../components/Loader';
 
 const schema = z.object({
   name: z.string().min(2, 'Program name is required'),
@@ -71,6 +72,7 @@ const CreateProgram = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Loader visible={loading} />
         {/* Navigation Header */}
         <View style={styles.headerRow}>
           <TouchableOpacity

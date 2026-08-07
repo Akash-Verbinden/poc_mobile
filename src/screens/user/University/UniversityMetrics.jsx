@@ -34,7 +34,7 @@ export default function UniversityMetrics({
       <CountCard
         title="Universities Unassigned"
         count={unassigned}
-        iconName="close-circle-outline"
+        iconName="document-text-outline"
       />
       <CountCard
         title="Total Programs Distributed"

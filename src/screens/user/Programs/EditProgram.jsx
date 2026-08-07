@@ -16,6 +16,7 @@ import {
   getProgramDetails,
   updateProgram,
 } from "../../../services/allServices";
+import Loader from "../../../components/Loader";
 
 export default function EditProgram({ route, navigation }) {
   const programId = route?.params?.id;
@@ -115,14 +116,6 @@ export default function EditProgram({ route, navigation }) {
     }
   };
 
-  if (fetching) {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#2563eb" />
-      </View>
-    );
-  }
-
   return (
     <View style={styles.screen}>
       <ScrollView
@@ -130,6 +123,7 @@ export default function EditProgram({ route, navigation }) {
         keyboardShouldPersistTaps="handled"
         nestedScrollEnabled={true}
       >
+        <Loader visible={fetching || loading} />
         {/* Header Bar */}
         <View style={styles.headerBar}>
           <TouchableOpacity
