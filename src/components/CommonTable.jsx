@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
-} from "react-native";
+} from 'react-native';
 
 export default function CommonTable({
   columns = [],
@@ -23,16 +23,16 @@ export default function CommonTable({
   // Calculate explicit total width for all columns combined
   const totalTableWidth = columns.reduce(
     (acc, col) => acc + (col.width || 130),
-    0
+    0,
   );
 
   return (
     <View style={styles.container}>
-      {loading && (
+      {/* {loading && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color="#2563eb" />
         </View>
-      )}
+      )} */}
 
       {/* 1. Outer Horizontal ScrollView */}
       <ScrollView
@@ -53,10 +53,10 @@ export default function CommonTable({
                 style={[
                   styles.headerCell,
                   { width: col.width || 130 },
-                  col.center && { alignItems: "center" },
+                  col.center && { alignItems: 'center' },
                 ]}
               >
-                {typeof col.name === "string" ? (
+                {typeof col.name === 'string' ? (
                   <Text style={styles.headerText}>{col.name}</Text>
                 ) : (
                   col.name
@@ -78,14 +78,14 @@ export default function CommonTable({
                   ]}
                 >
                   {columns.map((col, colIdx) => {
-                    const value = col.selector ? col.selector(item) : "";
+                    const value = col.selector ? col.selector(item) : '';
                     return (
                       <View
                         key={colIdx}
                         style={[
                           styles.cell,
                           { width: col.width || 130 },
-                          col.center && { alignItems: "center" },
+                          col.center && { alignItems: 'center' },
                         ]}
                       >
                         {col.cell ? (
@@ -94,7 +94,7 @@ export default function CommonTable({
                           <Text style={styles.cellText} numberOfLines={1}>
                             {value !== undefined && value !== null
                               ? String(value)
-                              : ""}
+                              : ''}
                           </Text>
                         )}
                       </View>
@@ -141,85 +141,85 @@ export default function CommonTable({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 8,
-    overflow: "hidden",
+    overflow: 'hidden',
     marginVertical: 8,
   },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255,255,255,0.7)",
+    backgroundColor: 'rgba(255,255,255,0.7)',
     zIndex: 10,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerRow: {
-    flexDirection: "row",
-    backgroundColor: "rgba(233, 239, 253, 1)",
+    flexDirection: 'row',
+    backgroundColor: 'rgba(233, 239, 253, 1)',
     paddingVertical: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   headerCell: {
     paddingHorizontal: 8,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   headerText: {
     fontSize: 13,
-    fontWeight: "600",
-    color: "#4b5563",
+    fontWeight: '600',
+    color: '#4b5563',
   },
   row: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#f1f1f1",
-    alignItems: "center",
+    borderBottomColor: '#f1f1f1',
+    alignItems: 'center',
   },
   stripedRow: {
-    backgroundColor: "#f9fafb",
+    backgroundColor: '#f9fafb',
   },
   cell: {
     paddingHorizontal: 8,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   cellText: {
     fontSize: 13,
-    color: "#374151",
+    color: '#374151',
   },
   emptyContainer: {
     padding: 32,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   emptyText: {
-    color: "#9ca3af",
+    color: '#9ca3af',
     fontSize: 14,
   },
   paginationContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 12,
     borderTopWidth: 1,
-    borderTopColor: "#e5e7eb",
-    backgroundColor: "#fff",
+    borderTopColor: '#e5e7eb',
+    backgroundColor: '#fff',
   },
   pageBtn: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: "#2563eb",
+    backgroundColor: '#2563eb',
     borderRadius: 6,
   },
   pageBtnDisabled: {
-    backgroundColor: "#d1d5db",
+    backgroundColor: '#d1d5db',
   },
   pageBtnText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   pageInfoText: {
     fontSize: 12,
-    color: "#4b5563",
+    color: '#4b5563',
   },
 });

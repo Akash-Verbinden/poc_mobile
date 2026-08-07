@@ -32,6 +32,7 @@ const ProgramsMetrics = ({ metrics }) => {
     </View>
   );
 };
+
 export default ProgramsMetrics;
 
 const styles = StyleSheet.create({

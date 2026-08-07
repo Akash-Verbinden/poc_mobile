@@ -3,7 +3,7 @@ import React from 'react';
 import Dashboard from '../../screens/user/Dashboard/Dashboard';
 import Programs from '../../screens/user/Programs/Programs';
 import Communication from '../../screens/user/Communication/Communication';
-import Universities from '../../screens/user/Universities';
+import Universities from '../../screens/user/University/Universities';
 import Offers from '../../screens/user/Offers';
 import Students from '../../screens/user/Students';
 import Resources from '../../screens/user/Resources';
