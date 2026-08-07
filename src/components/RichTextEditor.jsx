@@ -1,35 +1,60 @@
-import React, { useRef, useEffect } from "react";
-import { View, StyleSheet, ActivityIndicator } from "react-native";
+import React, { useRef, useEffect, useCallback } from "react";
+import { View, StyleSheet } from "react-native";
 import { RichEditor, RichToolbar, actions } from "react-native-pell-rich-editor";
 import Toast from "react-native-toast-message";
 
-export default function RichTextEditor({
+function RichTextEditor({
   model = "",
   onChange,
   readOnly = false,
   maxLength = 200000,
 }) {
   const richTextRef = useRef(null);
+  const contentRef = useRef(model);
+  const debounceTimerRef = useRef(null);
+
 
   useEffect(() => {
-    if (richTextRef.current) {
+    if (richTextRef.current && model !== contentRef.current) {
+      contentRef.current = model;
       richTextRef.current.setContentHTML(model || "");
     }
   }, [model]);
 
-  const handleChange = (htmlValue) => {
-    if (readOnly) return;
-    const plainText = htmlValue.replace(/<[^>]*>?/gm, "");
-    if (plainText.length > maxLength) {
-      Toast.show({
-        type: "error",
-        text1: "Character Limit Exceeded",
-        text2: `Maximum allowed limit is ${maxLength} characters.`,
-      });
-      return;
-    }
-    onChange?.(htmlValue);
-  };
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleChange = useCallback(
+    (htmlValue) => {
+      if (readOnly) return;
+
+      const plainText = htmlValue.replace(/<[^>]*>?/gm, "");
+      if (plainText.length > maxLength) {
+        Toast.show({
+          type: "error",
+          text1: "Character Limit Exceeded",
+          text2: `Maximum allowed limit is ${maxLength} characters.`,
+        });
+        return;
+      }
+
+      contentRef.current = htmlValue;
+
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+
+      debounceTimerRef.current = setTimeout(() => {
+        onChange?.(htmlValue);
+      }, 300);
+    },
+    [readOnly, maxLength, onChange]
+  );
 
   const customCSS = `
     body { font-family: -apple-system, Roboto, sans-serif; font-size: 14px; color: #000; padding: 10px; }
@@ -67,7 +92,7 @@ export default function RichTextEditor({
       <View style={styles.editorWrapper}>
         <RichEditor
           ref={richTextRef}
-          initialContentHTML={model}
+          initialContentHTML={contentRef.current}
           onChange={handleChange}
           placeholder="Write content here..."
           disabled={readOnly}
@@ -79,6 +104,8 @@ export default function RichTextEditor({
     </View>
   );
 }
+
+export default React.memo(RichTextEditor);
 
 const styles = StyleSheet.create({
   container: { borderRadius: 8, backgroundColor: "#fff", borderWidth: 1, borderColor: "#d1d5db", overflow: "hidden" },
