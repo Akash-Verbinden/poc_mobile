@@ -16,6 +16,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createProgram } from '../../../services/allServices';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import Loader from '../../../components/Loader';
+import BackButton from '../../../components/Buttons/BackButton';
 
 const schema = z.object({
   name: z.string().min(2, 'Program name is required'),
@@ -75,13 +76,7 @@ const CreateProgram = ({ navigation }) => {
         <Loader visible={loading} />
         {/* Navigation Header */}
         <View style={styles.headerRow}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Ionicons name="arrow-back" size={20} color="#000" />
-            <Text style={styles.backText}>Back to Programs List</Text>
-          </TouchableOpacity>
+          <BackButton title="Back to Programs List" />
           <Text style={styles.headerTitle}>Create Program</Text>
           <View style={{ width: 40 }} /> Spacer for symmetry
         </View>

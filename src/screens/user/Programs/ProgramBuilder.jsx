@@ -20,6 +20,7 @@ import {
   getTopicContents,
 } from '../../../services/allServices';
 import Loader from '../../../components/Loader';
+import BackButton from '../../../components/Buttons/BackButton';
 
 export default function ProgramBuilder({ route, navigation }) {
   const programId = route?.params?.id || {};
@@ -102,12 +103,7 @@ export default function ProgramBuilder({ route, navigation }) {
       <Loader visible={loading} />
       {/* Top Header */}
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.navBtn}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={22} color="#000" />
-        </TouchableOpacity>
+        <BackButton title="" />
 
         <Text style={styles.headerTitle} numberOfLines={1}>
           {programName || 'Program Builder'}

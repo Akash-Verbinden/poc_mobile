@@ -16,6 +16,7 @@ import {
   shareProgram,
 } from "../../../services/allServices";
 import Loader from "../../../components/Loader";
+import BackButton from "../../../components/Buttons/BackButton";
 
 export default function ShareProgram({ route, navigation }) {
   const programId = route?.params?.id;
@@ -126,14 +127,14 @@ export default function ShareProgram({ route, navigation }) {
         <Loader visible={pageLoading} />
         {/* Header Bar */}
         <View style={styles.headerBar}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={styles.backBtn}
           >
             <Ionicons name="arrow-back" size={20} color="#000" />
             <Text style={styles.backBtnText}>Back to Programs List</Text>
-          </TouchableOpacity>
-
+          </TouchableOpacity> */}
+          <BackButton title="Back to Programs List" />
           <Text style={styles.headerTitle} numberOfLines={1}>
             {programName}
           </Text>

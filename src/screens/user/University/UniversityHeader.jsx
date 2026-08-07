@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
+import PrimaryButton from '../../../components/Buttons/PrimaryButton';
 
 export default function UniversityHeader({ navigation }) {
   return (
@@ -8,14 +9,11 @@ export default function UniversityHeader({ navigation }) {
       <Text style={styles.headerTitle}>
         List of Universities and their Status
       </Text>
-
-      <TouchableOpacity
-        style={styles.createBtn}
-        // onPress={() => navigation?.navigate('CreateUniversity')}
-      >
-        <Ionicons name="add-circle-outline" size={18} color="#fff" />
-        <Text style={styles.createBtnText}>Create University</Text>
-      </TouchableOpacity>
+      <PrimaryButton
+        title="Create University"
+        onPress={() => navigation?.navigate("createUniversity")}
+        iconName="add-circle-outline"
+      />
     </View>
   );
 }

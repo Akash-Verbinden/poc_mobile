@@ -17,6 +17,7 @@ import {
   deleteEmailTemplate,
 } from '../../../services/allServices';
 import Toast from 'react-native-toast-message';
+import Loader from '../../../components/Loader';
 
 export default function CommunicationTable() {
   const navigation = useNavigation();
@@ -203,6 +204,7 @@ export default function CommunicationTable() {
 
   return (
     <View style={styles.screenContainer}>
+      <Loader visible={loading} />
       <View style={styles.card}>
         {/* Search Input */}
         <View style={styles.searchContainer}>
