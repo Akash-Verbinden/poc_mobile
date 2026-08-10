@@ -9,6 +9,7 @@ import Loader from '../../../components/Loader';
 import CommonHeader from '../../../components/CommonHeader';
 import ProgramsHeader from './ProgramsHeader';
 import PrimaryButton from '../../../components/Buttons/PrimaryButton';
+import DescriptionText from '../../../components/DescriptionText';
 
 const Programs = () => {
   const [metrics, setMetrics] = useState({
@@ -51,6 +52,10 @@ const Programs = () => {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <ProgramsHeader />
         <ProgramsMetrics metrics={metrics} />
+        <DescriptionText
+          text="This tab allows you to create and manage programs. First create a new program using the “Create Program” button on top right. Once a new program has been created, then click on the “edit icon” to add content. Once the content has been published, then click on the “Share” icon to share with universities."
+          highlights={['“Create Program”', '“edit icon”', '“Share”']}
+        />
         <ProgramsTable />
       </ScrollView>
     </View>

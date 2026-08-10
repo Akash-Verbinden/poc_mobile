@@ -211,10 +211,10 @@ export default function ProgramTable() {
 
   return (
     <View style={styles.screen}>
-      <Text style={styles.instructionText}>
+      {/* <Text style={styles.instructionText}>
         This screen allows you to manage programs. Create a new program, edit to
         add content, and share with universities.
-      </Text>
+      </Text> */}
 
       <View style={styles.controlsContainer}>
         <View style={styles.searchBox}>

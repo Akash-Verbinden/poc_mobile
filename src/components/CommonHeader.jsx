@@ -3,7 +3,6 @@ import { View, Text, StyleSheet } from "react-native";
 
 export default function CommonHeader({
   title,
-  description,
   actionButtons = [],
   containerStyle,
 }) {
@@ -23,9 +22,9 @@ export default function CommonHeader({
       </View>
 
       {/* Description Text */}
-      {description && (
+      {/* {description && (
         <Text style={styles.description}>{description}</Text>
-      )}
+      )} */}
     </View>
   );
 }
@@ -49,10 +48,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
   },
-  description: {
-    fontStyle: "italic",
-    fontSize: 13,
-    color: "#000000",
-    lineHeight: 20,
-  },
+//   description: {
+//     fontStyle: "italic",
+//     fontSize: 13,
+//     color: "#000000",
+//     lineHeight: 20,
+//   },
 });

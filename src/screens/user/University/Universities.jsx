@@ -5,6 +5,7 @@ import UniversityStatus from './UniversityMetrics';
 import UniversityTable from './UniversityTable';
 import { getUniversityMetrics } from '../../../services/allServices';
 import Loader from '../../../components/Loader';
+import DescriptionText from '../../../components/DescriptionText';
 
 export default function Universities({ navigation }) {
   const [stats, setStats] = useState({
@@ -57,11 +58,10 @@ export default function Universities({ navigation }) {
       />
 
       {/* Helper Description Text */}
-      <Text style={styles.descriptionText}>
-        This tab enables you to create and manage universities. To create a new
-        university, click on the{' '}
-        <Text style={styles.linkText}>“Create University”</Text> button on top.
-      </Text>
+      <DescriptionText
+      text="This tab enables you to create and manage universities. To create a new university, click on the “Create University” button on the top right."
+      highlights={['“Create University”']}
+      />
 
       {/* Table Component */}
       <UniversityTable navigation={navigation} />
