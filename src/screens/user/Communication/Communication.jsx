@@ -1,7 +1,7 @@
-import React from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
-import CommunicationHeader from "./CommunicationHeader";
-import CommunicationTable from "./CommunicationTable";
+import React from 'react';
+import { View, ScrollView, StyleSheet } from 'react-native';
+import CommunicationHeader from './CommunicationHeader';
+import CommunicationTable from './CommunicationTable';
 
 export default function Communication() {
   return (
@@ -15,7 +15,7 @@ export default function Communication() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f9fafb",
+    backgroundColor: '#f9fafb',
   },
   content: {
     padding: 16,

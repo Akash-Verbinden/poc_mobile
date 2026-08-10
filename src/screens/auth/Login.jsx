@@ -7,10 +7,9 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Button,
   Alert,
   TextInput,
-  Pressable, // ✅ Standard React Native TextInput
+  Pressable,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Loader from '../../components/Loader';
@@ -99,7 +98,7 @@ const Login = () => {
           loginResponse?.data?.message ||
           loginResponse?.message ||
           'Invalid credentials. Please try again.';
-       ToastView.error(errorMessage);
+        ToastView.error(errorMessage);
       }
     } catch (error) {
       const fallbackError =
@@ -124,15 +123,20 @@ const Login = () => {
           contentContainerStyle={{
             flexGrow: 1,
             padding: 20,
-            flex: 1,
             justifyContent: 'center',
           }}
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.container}>
             <Text style={styles.title}>Sign in</Text>
+            <Text style={styles.titleText}>
+              Please enter your credentials to continue
+            </Text>
 
             {/* Email Input */}
+            <Text style={styles.loginText}>
+              Email <Text style={{ color: '#ef4444' }}>*</Text>
+            </Text>
             <View style={styles.inputContainer}>
               <TextInput
                 placeholder="Enter your email"
@@ -148,7 +152,10 @@ const Login = () => {
               />
             </View>
 
-            {/* Password Input with Toggle Icon */}
+            {/* Password Input */}
+            <Text style={styles.loginText}>
+              Password <Text style={{ color: '#ef4444' }}>*</Text>
+            </Text>
             <View style={styles.inputContainer}>
               <TextInput
                 placeholder="Enter your password"
@@ -166,7 +173,7 @@ const Login = () => {
                 style={styles.iconContainer}
               >
                 <Ionicons
-                  name={isPasswordVisible ? 'eye-outline' : 'eye-off-outline'}
+                  name={isPasswordVisible ? 'eye-off-outline' : 'eye-outline'}
                   size={22}
                   color="#666"
                 />
@@ -176,7 +183,6 @@ const Login = () => {
             {/* Submit Button */}
             <View style={styles.buttonContainer}>
               <Pressable
-                title="Sign In"
                 onPress={handleSubmit}
                 disabled={loading}
                 style={({ pressed }) => [
@@ -184,11 +190,8 @@ const Login = () => {
                   pressed && styles.buttonPressed,
                 ]}
               >
-                <Text
-                  style={styles.buttonText}
-                >
-                  Sign in <Ionicons name="arrow-forward" size={22} color="#FFFFFF" />
-                </Text>
+                <Text style={styles.buttonText}>Sign in</Text>
+                <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
               </Pressable>
             </View>
           </View>
@@ -203,13 +206,23 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff',
     borderRadius: 12,
-    textAlign: 'center',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 10,
     textAlign: 'center',
+  },
+  titleText: {
+    fontSize: 14,
+    color: '#6b7280',
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  loginText: {
+    fontSize: 14,
+    marginBottom: 4,
+    color: '#000000',
   },
   emailInput: {
     flex: 1,
@@ -236,28 +249,27 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 10,
   },
-
   button: {
-  backgroundColor: '#007AFF',
-  paddingVertical: 14,         
-  paddingHorizontal: 24,
-  borderRadius: 8,
-  elevation: 3,
-  flexDirection: 'row',         
-  alignItems: 'center',        
-  justifyContent: 'center',     
-  gap: 10,                      
-},
-buttonPressed: {
-  backgroundColor: '#0051A8',
-  opacity: 0.9,
-},
-buttonText: {
-  color: '#FFFFFF',
-  fontSize: 16,
-  fontWeight: 'bold',
-  textTransform: 'uppercase',  
-},
+    backgroundColor: '#007AFF',
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    elevation: 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  buttonPressed: {
+    backgroundColor: '#0051A8',
+    opacity: 0.9,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+  },
 });
 
 export default Login;

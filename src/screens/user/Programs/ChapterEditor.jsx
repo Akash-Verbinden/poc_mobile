@@ -36,7 +36,7 @@ export default function ChapterEditor({
   const handleDraft = async () => {
     let res;
     if (chapter) {
-      res = await updateChapter(chapter.chapter_id, {
+      res = await updateChapter(chapter._id, {
         chapter_name: title,
         sub_title: subTitle,
         description,

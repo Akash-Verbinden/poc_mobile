@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { getProgramMetrics } from '../../../services/allServices';
 import ProgramsMetrics from './ProgramsMetrics';
 import ProgramsTable from './ProgramsTable';
 import { useNavigation } from '@react-navigation/native';
-import Ionicons from '@react-native-vector-icons/ionicons';
 import Loader from '../../../components/Loader';
+import CommonHeader from '../../../components/CommonHeader';
+import ProgramsHeader from './ProgramsHeader';
+import PrimaryButton from '../../../components/Buttons/PrimaryButton';
 
 const Programs = () => {
   const [metrics, setMetrics] = useState({
@@ -47,21 +49,7 @@ const Programs = () => {
     <View style={styles.container}>
       <Loader visible={loading} />
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.mainHeader}>
-            List of Program Data and their Status
-          </Text>
-
-          <TouchableOpacity
-            style={styles.createButton}
-            onPress={() => navigation.navigate('createProgram')}
-            activeOpacity={0.8}
-          >
-            <Ionicons name="add-circle-outline" size={16} color="#ffffff" />
-            <Text style={styles.createButtonText}>Create Program</Text>
-          </TouchableOpacity>
-        </View>
-
+        <ProgramsHeader />
         <ProgramsMetrics metrics={metrics} />
         <ProgramsTable />
       </ScrollView>
