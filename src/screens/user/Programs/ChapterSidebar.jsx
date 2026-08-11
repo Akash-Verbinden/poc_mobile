@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   Alert,
+  Platform,
 } from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import { deleteChapter, deleteTopic } from '../../../services/allServices';
@@ -25,18 +26,31 @@ export default function ChapterSidebar({
 
   const chapters = program || [];
 
-  const handleAddTopic = chapterId => {
-    setSelectedChapter(null);
-    setSelectedTopic({
-      chapter_id: chapterId,
-      topic_name: '',
-      sub_title: '',
-      description: '',
-      isNew: true,
-    });
-    setMode('topic');
-    setIsEditing(true);
+  const runAfterModalClose = action => {
     closeSidebar();
+    // iOS requires a slight tick after modal dismiss so the native UIWindow releases responder focus
+    if (Platform.OS === 'ios') {
+      setTimeout(() => {
+        action();
+      }, 300);
+    } else {
+      action();
+    }
+  };
+
+  const handleAddTopic = chapterId => {
+    runAfterModalClose(() => {
+      setSelectedChapter(null);
+      setSelectedTopic({
+        chapter_id: chapterId,
+        topic_name: '',
+        sub_title: '',
+        description: '',
+        isNew: true,
+      });
+      setMode('topic');
+      setIsEditing(true);
+    });
   };
 
   const handleDeleteChapter = chapterId => {
@@ -111,10 +125,11 @@ export default function ChapterSidebar({
                 <TouchableOpacity
                   onPress={e => {
                     e.stopPropagation();
-                    fetchChapterContent(chapterId);
-                    setMode('chapter');
-                    setIsEditing(true);
-                    closeSidebar();
+                    runAfterModalClose(() => {
+                      fetchChapterContent(chapterId);
+                      setMode('chapter');
+                      setIsEditing(true);
+                    });
                   }}
                   style={styles.iconBtn}
                 >
@@ -143,11 +158,12 @@ export default function ChapterSidebar({
                       <TouchableOpacity
                         style={{ flex: 1 }}
                         onPress={() => {
-                          fetchTopicContent(topicId);
-                          setSelectedTopic(topic);
-                          setMode('topic');
-                          setIsEditing(false);
-                          closeSidebar();
+                          runAfterModalClose(() => {
+                            fetchTopicContent(topicId);
+                            setSelectedTopic(topic);
+                            setMode('topic');
+                            setIsEditing(false);
+                          });
                         }}
                       >
                         <Text style={styles.topicTitle}>
@@ -159,10 +175,11 @@ export default function ChapterSidebar({
                       <View style={styles.row}>
                         <TouchableOpacity
                           onPress={() => {
-                            fetchTopicContent(topicId);
-                            setMode('topic');
-                            setIsEditing(true);
-                            closeSidebar();
+                            runAfterModalClose(() => {
+                              fetchTopicContent(topicId);
+                              setMode('topic');
+                              setIsEditing(true);
+                            });
                           }}
                           style={styles.iconBtn}
                         >
@@ -204,10 +221,11 @@ export default function ChapterSidebar({
       <TouchableOpacity
         style={styles.addChapterBtn}
         onPress={() => {
-          setMode('chapter');
-          setSelectedChapter(null);
-          setIsEditing(true);
-          closeSidebar();
+          runAfterModalClose(() => {
+            setMode('chapter');
+            setSelectedChapter(null);
+            setIsEditing(true);
+          });
         }}
       >
         <Ionicons name="add-circle-outline" size={20} color="#fff" />

@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   Modal,
   StyleSheet,
-  ActivityIndicator,
 } from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import Toast from 'react-native-toast-message';
@@ -35,13 +34,10 @@ export default function ProgramBuilder({ route, navigation }) {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  console.log('Program ID:', programId);
-
   const fetchProgram = async () => {
     try {
       setLoading(true);
       const res = await getProgramTree(programId);
-      console.log('Program Tree Response:', res);
       if (res?.success) {
         setProgram(res.data.chapters);
         setProgramName(res.data.program_name);
@@ -100,7 +96,16 @@ export default function ProgramBuilder({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Loader visible={loading} />
+      {/* 
+        FIX FOR IOS: Wrap Loader or render only when loading is strictly true,
+        and ensure pointerEvents does not capture underlying touch events.
+      */}
+      {loading && (
+        <View style={StyleSheet.absoluteFillObject} pointerEvents="auto">
+          <Loader visible={loading} />
+        </View>
+      )}
+
       {/* Top Header */}
       <View style={styles.header}>
         <BackButton title="" />
@@ -174,7 +179,7 @@ export default function ProgramBuilder({ route, navigation }) {
               fetchProgram={fetchProgram}
               fetchChapterContent={fetchChapterContent}
               fetchTopicContent={fetchTopicContent}
-              closeSidebar={() => setIsSidebarOpen(false)} 
+              closeSidebar={() => setIsSidebarOpen(false)}
             />
           </View>
         </View>
@@ -185,7 +190,6 @@ export default function ProgramBuilder({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f9fafb' },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -196,7 +200,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e5e7eb',
   },
-  navBtn: { padding: 4 },
   headerTitle: {
     fontSize: 16,
     fontWeight: '600',
