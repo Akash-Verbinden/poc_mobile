@@ -7,6 +7,51 @@ import { logout as reduxLogout } from '../redux/slices/authSlice';
 import { persistor } from '../redux/store';
 import COELogo from '../../assets/icons/COE_logo.png';
 
+// const MENU_ITEMS = [
+//   {
+//     name: 'Dashboard',
+//     icon: 'bar-chart-outline',
+//     route: 'dashboard',
+//     tab: 'dashboardTab',
+//   },
+//   {
+//     name: 'Programs',
+//     icon: 'book-outline',
+//     route: 'programs',
+//     tab: 'programs',
+//   },
+//   {
+//     name: 'Universities',
+//     icon: 'school-outline',
+//     route: 'universities',
+//     tab: 'dashboardTab',
+//   },
+//   {
+//     name: 'Students',
+//     icon: 'person-outline',
+//     route: 'students',
+//     tab: 'dashboardTab',
+//   },
+//   {
+//     name: 'Resources',
+//     icon: 'bookmark-outline',
+//     route: 'resources',
+//     tab: 'dashboardTab',
+//   },
+//   {
+//     name: 'Offers',
+//     icon: 'pricetag-outline',
+//     route: 'offers',
+//     tab: 'dashboardTab',
+//   },
+//   {
+//     name: 'Communication',
+//     icon: 'mail-outline',
+//     route: 'communication',
+//     tab: 'communication',
+//   },
+// ];
+
 const MENU_ITEMS = [
   {
     name: 'Dashboard',
@@ -24,7 +69,7 @@ const MENU_ITEMS = [
     name: 'Universities',
     icon: 'school-outline',
     route: 'universities',
-    tab: 'dashboardTab',
+    tab: 'dashboardTab', 
   },
   {
     name: 'Students',

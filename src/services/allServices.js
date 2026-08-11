@@ -291,3 +291,9 @@ export const updateUniversityStatus = async (university_id, status) => {
 
   return response.data;
 };
+
+// Create University
+export const createUniversity = async (payload) => {
+  const response = await api.post("/superadmin/universities", payload);
+  return response.data;
+};
