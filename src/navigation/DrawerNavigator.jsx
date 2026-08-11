@@ -25,7 +25,7 @@ export default function DrawerNavigator() {
           backgroundColor: '#1d4ed8',
           width: 280,
         },
-        
+
         headerLeft: () => (
           <TouchableOpacity
             onPress={() => navigation.openDrawer()}
@@ -35,9 +35,10 @@ export default function DrawerNavigator() {
           </TouchableOpacity>
         ),
         headerTitleAlign: 'center',
-        headerStyle:{
+        headerStyle: {
           backgroundColor: '#1d4ed8',
-        }
+        },
+        drawerType: 'front',
       })}
     >
       <Drawer.Screen
